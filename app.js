@@ -8,8 +8,6 @@ const sassMiddleware = require('node-sass-middleware');
 const hbs = require('hbs');
 
 let indexRouter = require('./routes/index');
-let usersRouter = require('./routes/users');
-let contactRouter = require('./routes/contact');
 
 let app = express();
 
@@ -33,13 +31,10 @@ app.use(sassMiddleware({
 // static pages (html) live in the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
-app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
-app.use('/css', express.static(__dirname + '/node_modules/font-awesome/css')); // redirect CSS font-awesome
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/contact', contactRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

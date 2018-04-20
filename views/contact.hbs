@@ -1,2 +1,44 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<div class="pageTitle text-center py-5">
+    <h1><strong>{{title}}</strong></h1>
+</div>
+
+<div class="container">
+    <div class="formResponse">
+        {{# if errors.length }}
+            <div class="row bg-danger py-2 col-lg-6">
+                <ul class="d-inline">
+                    {{#each errors}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+        {{else if success}}
+            <div class="row bg-success py-2">
+                Success
+            </div>
+        {{/if}}
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <form action="{{formAction}}" method="{{formMethod}}">
+                <div class="form-group">
+                    <div class="input-group input-group-lg">
+                        <input type="text" class="form-control" placeholder="Name" name="name" value="{{name}}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group input-group-lg">
+                        <input type="text" class="form-control" placeholder="Email" name="email" value="{{email}}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group input-group-lg">
+                        <textarea class="form-control" placeholder="Message" name="message" rows="5">{{message}}</textarea>
+                    </div>
+                </div>
+                <input id="contactSubmitButton" type="submit" class="btn btn-block btn-lg" value="Submit">
+            </form>
+        </div>
+    </div>
+</div>
