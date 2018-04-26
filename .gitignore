@@ -1,5 +1,7 @@
 node_modules/
-encryption/
+config/config.json
+.idea/
+*.zip
 
 # Logs
 logs

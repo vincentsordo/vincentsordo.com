@@ -1,14 +1,8 @@
 {
   "test":{
-    "PORT":3000,
-    "PORT_HTTPS":443
+    "PORT":3000
   },
   "development":{
-    "PORT":3000,
-    "PORT_HTTPS":443
-  },
-  "production":{
-    "PORT":80,
-    "PORT_HTTPS":443
+    "PORT":3000
   }
 }
