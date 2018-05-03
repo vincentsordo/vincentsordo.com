@@ -1,5 +1,4 @@
-#!/usr/bin/env node
-"use strict";
+
 
 // load environment configs
 let {env} = require('../config/config.js');
