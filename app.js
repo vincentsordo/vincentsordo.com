@@ -8,6 +8,7 @@ const sassMiddleware = require('node-sass-middleware');
 const hbs = require('hbs');
 
 let indexRouter = require('./routes/index');
+let blogRouter = require('./routes/blog');
 
 let app = express();
 
@@ -28,12 +29,13 @@ app.use(sassMiddleware({
 	sourceMap: true
 }));
 
+
+
+app.use('/blog', blogRouter);
+app.use('/', indexRouter);
+
 // static pages (html) live in the public directory
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
-app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
-
-app.use('/', indexRouter);
 
 
 // catch 404 and forward to error handler
