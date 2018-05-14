@@ -6,6 +6,8 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const sassMiddleware = require('node-sass-middleware');
 const hbs = require('hbs');
+const bodyParser = require('body-parser');
+const {mongoose} = require('./db/mongoose.js');
 
 let indexRouter = require('./routes/index');
 let blogRouter = require('./routes/blog');
@@ -29,7 +31,7 @@ app.use(sassMiddleware({
 	sourceMap: true
 }));
 
-
+app.use(bodyParser.json());
 
 app.use('/blog', blogRouter);
 app.use('/', indexRouter);

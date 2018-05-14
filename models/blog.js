@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 // models
 let BlogSchema = mongoose.Schema({
 	title: {
@@ -25,6 +26,17 @@ let BlogSchema = mongoose.Schema({
 });
 
 // add BlogSchema.methods here
+BlogSchema.methods.toJSON = function () {
+	let blog = this;
+	let blogObject = blog.toObject();
+
+	// add created date to blog entry
+	let date = new Date(blogObject.createdTime);
+	blogObject.createdDate = date.getMonth() + '/' + date.getDay() + '/' + date.getFullYear();
+
+	return blogObject;
+
+};
 
 // add BlogSchema.statics here
 
