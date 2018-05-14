@@ -7,10 +7,11 @@ const logger = require('morgan');
 const sassMiddleware = require('node-sass-middleware');
 const hbs = require('hbs');
 const bodyParser = require('body-parser');
-const {mongoose} = require('./db/mongoose.js');
 
-let indexRouter = require('./routes/index');
-let blogRouter = require('./routes/blog');
+// include MongoDb/Mongoose
+require('./db/mongoose.js');
+
+
 
 let app = express();
 
@@ -33,8 +34,15 @@ app.use(sassMiddleware({
 
 app.use(bodyParser.json());
 
-app.use('/blog', blogRouter);
-app.use('/', indexRouter);
+// api routes
+app.use('/api/v1/blog', require('./routes/api/v1/blogApiRoute'));
+app.use('/api/v1/contact', require('./routes/api/v1/contactApiRoute'));
+
+// view routes
+app.use('/about', require('./routes/view/aboutViewRoute'));
+app.use('/contact', require('./routes/view/contactViewRoute'));
+app.use('/blog', require('./routes/view/blogViewRoute'));
+app.use('/', require('./routes/view/homeViewRoute'));
 
 // static pages (html) live in the public directory
 app.use(express.static(path.join(__dirname, 'public')));
