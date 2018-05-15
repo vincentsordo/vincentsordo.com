@@ -11,16 +11,7 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script type="text/javascript">
-    // on ready load recent blog posts
-    $(function() {
-        $.get('/blog/listing', function(err, data) {
-        	if (data.length > 0) {
-                data.forEach(function (element) {
-                    $('#blogList').append('<li>' + element.title + '<li>');
-                });
-            }
-        });
-    });
+    // on load load recent blog posts
+    window.onload = populateBlogListing();
 </script>
