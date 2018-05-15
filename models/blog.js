@@ -19,6 +19,10 @@ let BlogSchema = mongoose.Schema({
 		type: Number,
 		default: null
 	},
+	updatedTime: {
+		type: Number,
+		default: null
+	},
 	_creator: {
 		type: mongoose.Schema.Types.ObjectId,
 		required: false

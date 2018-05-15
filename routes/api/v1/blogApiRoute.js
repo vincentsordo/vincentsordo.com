@@ -2,6 +2,8 @@ const express = require('express');
 let {Blog} = require('../../../models/blog.js');
 let router = express.Router();
 const {ObjectID} = require('mongodb');
+const _ = require('lodash');
+
 
 const DEFAULT_LIMIT = 10;
 
@@ -12,8 +14,6 @@ const DEFAULT_LIMIT = 10;
  */
 router.get('/last/:n', (req, res) => {
 	let limit = parseInt(req.params.n || DEFAULT_LIMIT);
-	console.log(limit);
-	console.log(typeof limit);
 	Blog.find({})
 		.limit(limit)
 		.sort('-createdTime')
@@ -69,6 +69,55 @@ router.post('/', async (req, res) => {
 		res.send(newPost);
 	} catch(e) {
 		res.status(400).send(e);
+	}
+});
+
+/**
+ * Updates an existing blog post
+ */
+router.patch('/:id', async (req, res) => {
+	let blogPostId = req.params.id;
+
+	if (!ObjectID.isValid(blogPostId)) {
+		return res.status(404).send({message: 'Invalid id'});
+	}
+
+	let body = _.pick(req.body, ['title','text']);
+	body.updatedTime = new Date().getTime();
+
+	try {
+		// get blog post by id
+		let updatedBlogPost = await Blog.findOneAndUpdate(
+			{_id: blogPostId},
+			{$set: body},
+			{new: true}
+		);
+		if (!updatedBlogPost) {
+			return res.status(400).send({message: 'Id not found'});
+		}
+
+		res.send(updatedBlogPost);
+	} catch(e) {
+		res.send(400).send({message: 'Internal error'});
+	}
+});
+
+router.delete('/:id', async (req, res) => {
+	let blogPostId = req.params.id;
+
+	if (!ObjectID.isValid(blogPostId)) {
+		return res.status(404).send({message: 'Invalid id'});
+	}
+
+	try {
+		// get blog post by id
+		let blogPost = await Blog.findOneAndRemove({_id: blogPostId});
+		if (!blogPost) {
+			return res.status(400).send({message: 'Id not found'});
+		}
+		res.send(blogPost);
+	} catch(e) {
+		res.send(400).send({message: 'Internal error'});
 	}
 });
 
