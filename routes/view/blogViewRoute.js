@@ -4,8 +4,8 @@ let router = express.Router();
 // REMEMBER URL Mapping is prefixed with '/blog'
 
 // view routes
-router.get('/listing', (req, res) => {
-	return res.render('blog/listing');
+router.get('/listing/:n?', (req, res) => {
+	return res.render('blog/listing', {title: 'Recent Blog Posts'});
 });
 
 router.get('/post/:id', (req, res) => {

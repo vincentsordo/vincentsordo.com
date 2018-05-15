@@ -6,25 +6,27 @@
     <input id="postId" type="hidden" value="{{ postId }}">
 
     <div id="errorRow" class="row d-none"></div>
-    <div id="postRow" class="row">
-        <h2 id="postTitle"></h2><strong id="postCreatedDate"></strong>
-        <div id="postDiv" class="col-lg-12">
-            <p id="postParagraph"></p>
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div id="blogPost" class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 id="postTitle" class="card-title"></h2>
+                    <p id="postParagraph" class="card-text"></p>
+                </div>
+                <div class="card-footer text-muted">
+                    Posted on <strong id="postCreatedDate"></strong> by
+                    <a href="#">Vincent Sordo</a>
+                </div>
+            </div>
         </div>
+        <div class="col-lg-2"></div>
     </div>
 </div>
 
 <script type="text/javascript">
     // on ready load recent blog posts
-    $(function() {
-        $.get('/blog/post' + $('#postId').val(), function(err, post) {
-        	if (err) {
-                $('#errorRow').text(err);
-            } else {
-                $('#postTitle').text(post.title);
-                $('#postCreatedDate').text(post.createdDate);
-                $('#postParagraph').text(post.text);
-            }
-        });
+    jQuery(function() {
+        populateBlogPost(jQuery('#postId').val());
     });
 </script>

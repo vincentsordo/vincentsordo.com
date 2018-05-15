@@ -44,4 +44,7 @@ a {
   opacity: 0.9;
   margin: 20px; }
 
+.card-title a, .card-footer a {
+  color: #3292a6; }
+
 /*# sourceMappingURL=style.css.map */

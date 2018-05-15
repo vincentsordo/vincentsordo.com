@@ -36,7 +36,6 @@ app.use(bodyParser.json());
 
 // api routes
 app.use('/api/v1/blog', require('./routes/api/v1/blogApiRoute'));
-app.use('/api/v1/contact', require('./routes/api/v1/contactApiRoute'));
 
 // view routes
 app.use('/about', require('./routes/view/aboutViewRoute'));

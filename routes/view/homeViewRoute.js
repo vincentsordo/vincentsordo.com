@@ -5,9 +5,9 @@ let router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res) {
-	res.render('index', {
+	res.render('home', {
 		title: 'Welcome!',
-		age: Math.abs(new Date(Date.now() - new Date('1988-07-11').getTime()).getUTCFullYear() - 1970)
+		age: (new Date().getTime() - new Date('1988-07-11').getTime()) / 31540000000
 	});
 });
 
