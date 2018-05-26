@@ -28,11 +28,11 @@ function populateBlogListing(numberOfBlogPosts) {
 function populateBlogPost(postId) {
 	jQuery.get('/api/v1/blog/' + postId, function(post) {
 		if (!post) {
-			jQuery('#errorRow').text('Unable to find post');
+			jQuery('#errorRow').html('<p>Unable to find post</p>');
 		} else {
-			jQuery('#postTitle').text(post.title);
-			jQuery('#postCreatedDate').text(post.createdDate);
-			jQuery('#postParagraph').text(post.text);
+			jQuery('#postTitle').html(post.title);
+			jQuery('#postCreatedDate').html(post.createdAt);
+			jQuery('#postParagraph').html(post.text);
 		}
 	});
 }

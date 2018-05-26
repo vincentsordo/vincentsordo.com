@@ -5,5 +5,5 @@ if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === "test") {
 	dynamoose.AWS.config.update({
 		region: 'us-west-1',
 	});
-	//dynamoose.local();
+	dynamoose.local();
 }
