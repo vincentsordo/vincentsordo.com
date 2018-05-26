@@ -1,7 +1,6 @@
 const express = require('express');
 let {Blog} = require('../../../models/blog.js');
 let router = express.Router();
-const {ObjectID} = require('mongodb');
 const _ = require('lodash');
 
 
@@ -13,40 +12,40 @@ const DEFAULT_LIMIT = 10;
  * Get recent routes
  */
 router.get('/last/:n', (req, res) => {
-	let limit = parseInt(req.params.n || DEFAULT_LIMIT);
-	Blog.find({})
-		.limit(limit)
-		.sort('-createdTime')
-		.exec((err, docs) => {
-			console.log(err);
-			console.log(docs);
+	let limit = parseInt(req.params.n) || DEFAULT_LIMIT;
 
-			if (err) {
-				res.status(400).send(err);
-			} else {
-				res.send(docs);
-			}
-		});
+	try {
+		Blog.scan()
+			.limit(limit)
+			.exec((err, blogs) => {
+				console.log(blogs);
+				if (err) {
+					res.status(400).send(err);
+				} else {
+					res.send(blogs);
+				}
+			});
+	} catch(e) {
+		res.status(400).send(e);
+	}
 });
 
 /**
  * Get post by id
  */
-router.get('/:id', async (req, res) => {
+router.get('/:id', (req, res) => {
 	let blogPostId = req.params.id;
-
-	if (!ObjectID.isValid(blogPostId)) {
-		return res.status(404).send({message: 'Invalid id'});
-	}
 
 	try {
 		// get blog post by id
-		let blogPost = await Blog.findOne({_id: blogPostId});
-		if (!blogPost) {
-			res.status(400).send({message: 'Id not found'});
-		} else {
-			res.send(blogPost);
-		}
+		Blog.queryOne({id: blogPostId}, (err, blogPost) => {
+			if (err || !blogPost) {
+				res.status(400).send({message: 'Id not found'});
+			} else {
+				res.send(blogPost);
+			}
+		});
+
 	} catch(e) {
 		res.send(400).send({message: 'Internal error'});
 	}
@@ -57,16 +56,19 @@ router.get('/:id', async (req, res) => {
  *
  * Expects that the blog title and text
  */
-router.post('/', async (req, res) => {
-	let newBlogPost = new Blog({
-		title: req.body.title,
-		text: req.body.text,
-		createdTime: new Date().getTime()
-	});
-
+router.post('/', (req, res) => {
 	try {
-		let newPost = await newBlogPost.save()
-		res.send(newPost);
+		let newBlogPost = new Blog({
+			title: req.body.title,
+			text: req.body.text
+		});
+		newBlogPost.save((err) => {
+			if (err) {
+				res.status(400).send(err);
+			} else {
+				res.status(200).send(newBlogPost);
+			}
+		});
 	} catch(e) {
 		res.status(400).send(e);
 	}
@@ -78,46 +80,47 @@ router.post('/', async (req, res) => {
 router.patch('/:id', async (req, res) => {
 	let blogPostId = req.params.id;
 
-	if (!ObjectID.isValid(blogPostId)) {
-		return res.status(404).send({message: 'Invalid id'});
-	}
-
 	let body = _.pick(req.body, ['title','text']);
-	body.updatedTime = new Date().getTime();
 
 	try {
-		// get blog post by id
-		let updatedBlogPost = await Blog.findOneAndUpdate(
-			{_id: blogPostId},
-			{$set: body},
-			{new: true}
-		);
-		if (!updatedBlogPost) {
-			return res.status(400).send({message: 'Id not found'});
-		}
-
-		res.send(updatedBlogPost);
+		// update the blog post
+		Blog.update({id:blogPostId}, body, (err) => {
+			// 400 on error
+			if (err) {
+				res.status(400).send({error: err});
+			} else {
+				// get the updates blog post
+				Blog.get({id: blogPostId}, (err, blogPost) => {
+					if (err || !blogPost) {
+						return res.status(400).send({error: 'Invalid Id'});
+					} else {
+						res.send(blogPost);
+					}
+				});
+			}
+		});
 	} catch(e) {
-		res.send(400).send({message: 'Internal error'});
+		res.status(400).send({error: 'Internal error'});
 	}
 });
 
-router.delete('/:id', async (req, res) => {
+/**
+ * Delete a blog post by id
+ */
+router.delete('/:id', (req, res) => {
 	let blogPostId = req.params.id;
-
-	if (!ObjectID.isValid(blogPostId)) {
-		return res.status(404).send({message: 'Invalid id'});
-	}
 
 	try {
 		// get blog post by id
-		let blogPost = await Blog.findOneAndRemove({_id: blogPostId});
-		if (!blogPost) {
-			return res.status(400).send({message: 'Id not found'});
-		}
-		res.send(blogPost);
+		Blog.delete({id: blogPostId}, (err) => {
+			if (err) {
+				return res.status(400).send({error: 'Id not found'});
+			}
+		});
+
+		res.send({message: 'success'});
 	} catch(e) {
-		res.send(400).send({message: 'Internal error'});
+		res.send(400).send({error: 'Internal error'});
 	}
 });
 

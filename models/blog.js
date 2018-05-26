@@ -1,12 +1,15 @@
-const mongoose = require('mongoose');
+let shortid = require('shortid');
+let dynamoose = require('dynamoose');
 
 // models
-let BlogSchema = mongoose.Schema({
+let BlogSchema = new dynamoose.Schema({
+	id: {
+		type: String,
+		hashKey: true,
+		default: shortid.generate()
+	},
 	title: {
 		type: String,
-		required:true,
-		minLength:1,
-		unique: true,
 		trim: true
 	},
 	text: {
@@ -15,35 +18,21 @@ let BlogSchema = mongoose.Schema({
 		minLength: 1,
 		trim: true
 	},
-	createdTime: {
-		type: Number,
+	creator: {
+		type: String,
 		default: null
-	},
-	updatedTime: {
-		type: Number,
-		default: null
-	},
-	_creator: {
-		type: mongoose.Schema.Types.ObjectId,
-		required: false
 	}
+},
+{
+	throughput: {read: 15, write: 5},
+	timestamps: true
 });
 
 // add BlogSchema.methods here
-BlogSchema.methods.toJSON = function () {
-	let blog = this;
-	let blogObject = blog.toObject();
-
-	// add created date to blog entry
-	let date = new Date(blogObject.createdTime);
-	blogObject.createdDate = date.getMonth() + '/' + date.getDay() + '/' + date.getFullYear();
-
-	return blogObject;
-
-};
 
 // add BlogSchema.statics here
 
 
-let Blog = mongoose.model('blog', BlogSchema);
+let Blog = dynamoose.model('blog', BlogSchema);
+
 module.exports = {Blog};

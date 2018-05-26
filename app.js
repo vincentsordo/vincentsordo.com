@@ -8,9 +8,8 @@ const sassMiddleware = require('node-sass-middleware');
 const hbs = require('hbs');
 const bodyParser = require('body-parser');
 
-// include MongoDb/Mongoose
-require('./db/mongoose.js');
-
+// include Dynamooose
+require('./db/dynamoose.js');
 
 
 let app = express();
