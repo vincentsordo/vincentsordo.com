@@ -9,11 +9,11 @@ function populateBlogListing(numberOfBlogPosts) {
 				"<div id=\""+element._id+"\" class=\"card mb-4\">" +
 						"<div class=\"card-body\">" +
 							"<h2 id=\"postTitle\" class=\"card-title\">" +
-								"<a href=\"/blog/post/" + element._id + "\">"+element.title+"</a>" +
+								"<a href=\"/blog/post/" + element.id + "\">"+element.title+"</a>" +
 							"</h2>" +
 						"</div>" +
 						"<div class=\"card-footer text-muted\">" +
-						"Posted on <strong id=\"postCreatedDate\">"+element.createdDate+"</strong> by " +
+						"Posted on <strong id=\"postCreatedDate\">"+element.createdAt+"</strong> by " +
 						"<a href=\"/about\">Vincent Sordo</a>" +
 					"</div>" +
 				"</div>";
